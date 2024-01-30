@@ -1,0 +1,6 @@
+@cine_compra_v1.Server_HostAddress = http://localhost:5195
+
+GET {{cine_compra_v1.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
