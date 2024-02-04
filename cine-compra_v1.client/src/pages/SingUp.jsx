@@ -8,7 +8,6 @@ const Container = styled.section`
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
     a{
         text-decoration: none;
         color: white;
@@ -44,7 +43,7 @@ const ContentLogin = styled.div`
         border-radius: 0;
     }
     @media (width >= 1200px) {
-        margin: 0 0 0 45vw;
+        margin: 0 45vw 0 0 ;
         padding: 2rem;
         border-radius:0 12px 12px 0;
     }
@@ -165,26 +164,29 @@ const Option = styled.div`
     }
 `
 
-export const Login = () => {
+export const SingUp = () => {
     return (
         <>
             <Container>
                 <Content>
                     <ContentLogin>
                         <h1>Welcome</h1>
-                        <h2>Login</h2>
+                        <h2>Sing up</h2>
                         <form >
-                            <input type='email' placeholder='Email' required='required' />
-                            <input type='password' placeholder='Password' required='required' />
+                            <input type='text' placeholder='Username' required='' />
+                            <input type='email' placeholder='Email' required='' />
+                            <input type='password' placeholder='Password' />
                             <Option>
-                                <p><Link to='/sing-up'>Sing up</Link></p>
+                                <p><Link to='/login'>Login</Link></p>
                                 <p>Forgot your password?</p>
                             </Option>
 
                             <button type='submit'>
-                                <a href="#"><span>Login</span></a>
+                                <a href="#"><span>Sing up</span></a>
                             </button>
                         </form>
+                        <Link to='/'>
+                        </Link>
                     </ContentLogin>
                 </Content>
             </Container>
