@@ -1,7 +1,10 @@
 using cine_compra.Server.Context;
 using cine_compra.Server.Services;
+using cine_compra_v1.Server.Models.DTOs;
+using cine_compra_v1.Server.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -31,6 +34,9 @@ builder.Services.AddSwaggerGen(options =>{
 
 //Add injection Dependecy
 builder.Services.AddScoped<IAuthorizationServices, AuthorizationServices>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 //Ignore reference circle
 builder.Services.AddControllers().AddJsonOptions(opt => 

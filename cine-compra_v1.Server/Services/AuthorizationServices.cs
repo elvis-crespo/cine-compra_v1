@@ -79,14 +79,6 @@ namespace cine_compra.Server.Services
 
             string tokenCreated =  GenerateToken(userFound.Id.ToString());
 
-            //return new AuthorizationResponse
-            //{
-            //    Token = tokenCreated,
-            //    RefrestToken = tokenCreated, // I corrected the typo in "RefrestToken"
-            //    Result = true,
-            //    Message = "Created token"
-            //};
-
             string refreshTokenCreated = GenerateRefrestToken();
 
             return await Save(userFound.Id, tokenCreated, refreshTokenCreated);
@@ -133,9 +125,52 @@ namespace cine_compra.Server.Services
                 Message = "Ok"
             };
         }
-  
+
         //Token
-        private string GenerateToken(string idUser) 
+
+        public TokenValidationResult TokenValidation(string token) 
+        {
+            var key = _configuration.GetValue<string>("AppSettings:token");
+            var keyBytes = Encoding.UTF8.GetBytes(key);
+
+            try 
+            { 
+            var tokenHandler = new JwtSecurityTokenHandler();
+            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                //ValidateAudience = true,
+                ValidateLifetime = true, 
+            }, out SecurityToken validatedToken);
+
+            if(validatedToken is JwtSecurityToken jwtToken)
+            {
+                if (jwtToken.ValidTo > DateTime.UtcNow)
+                {
+                    return new TokenValidationResult
+                    {
+                        IsValid = true,
+                    };
+                }
+
+            }
+            }catch(Exception ex) 
+            {
+                return new TokenValidationResult
+                {
+                    IsValid = false,
+                };
+            }
+
+
+            return new TokenValidationResult { IsValid = false };
+        }
+
+
+        public string GenerateToken(string idUser) 
         {
             var key = _configuration.GetValue<string>("AppSettings:token");
             var keyBytes = Encoding.UTF8.GetBytes(key);
