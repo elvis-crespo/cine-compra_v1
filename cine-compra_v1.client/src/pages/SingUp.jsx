@@ -1,5 +1,8 @@
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
+import { registerUser } from '../redux/userSlice'
 
 const Container = styled.section`
     background: #192a3b;
@@ -8,9 +11,26 @@ const Container = styled.section`
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
     a{
         text-decoration: none;
         color: white;
+    }
+    svg{
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 20px;
+        color: #FFF;
+        width: 85px;
+        height: 85px;
+        scale: .8;
+        transition: .3s;
+        opacity: .7;
+        &:hover{
+            scale: 1;
+            opacity: 1;
+        }
     }
 `
 const Content = styled.div`
@@ -165,25 +185,62 @@ const Option = styled.div`
 `
 
 export const SingUp = () => {
+
+    const [userName, setUserName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    
+    const { isLoading, error } = useSelector((state) => state.user);
+
+    const HandleSubmit = (e) => {
+        e.preventDefault();
+        let userCred = {
+            userName, email, password
+        };
+
+        // Validate userCred before sending the request
+        if (!userCred.userName || !userCred.email || !userCred.password) {
+            alert('Please fill all fields');
+            return;
+        }
+
+        dispatch(registerUser(userCred)).then((result) => {
+            if (result.payload) {
+                setUserName('');
+                setEmail('');
+                setPassword('');
+                navigate('/login');
+            }
+        });
+    }
     return (
         <>
             <Container>
+                <Link to='/'>
+                    <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" strokeMiterlimit="10" strokeWidth="32" d="M256 64C150 64 64 150 64 256s86 192 192 192 192-86 192-192S362 64 256 64z"></path><path fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="32" d="m296 352-96-96 96-96"></path></svg>
+                </Link>
                 <Content>
                     <ContentLogin>
                         <h1>Welcome</h1>
                         <h2>Sing up</h2>
-                        <form >
-                            <input type='text' placeholder='Username' required='' />
-                            <input type='email' placeholder='Email' required='' />
-                            <input type='password' placeholder='Password' />
+                        <form onSubmit={HandleSubmit}>
+                            <input type='text' placeholder='Username' required autoComplete="current-password" value={userName} onChange={(e) => setUserName(e.target.value)} />
+                            <input type='email' placeholder='Email' id='email' required autoComplete="current-email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                            <input type='password' placeholder='Password' id='password' required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
                             <Option>
                                 <p><Link to='/login'>Login</Link></p>
                                 <p>Forgot your password?</p>
                             </Option>
 
                             <button type='submit'>
-                                <a href="#"><span>Sing up</span></a>
+                                <a href="#"><span>{isLoading ? 'Loading...' : 'Sing up'}</span></a>
                             </button>
+                            <div style={{ color: '#FFF' }}>
+                                {error && <p>{error}</p>} {/* Muestra el mensaje de error si existe */}
+                            </div>
                         </form>
                         <Link to='/'>
                         </Link>

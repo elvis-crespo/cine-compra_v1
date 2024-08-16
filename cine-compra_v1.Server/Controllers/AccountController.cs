@@ -4,13 +4,10 @@ using cine_compra.Server.Context;
 using cine_compra.Server.Models.DTOs;
 using cine_compra.Server.Models.Entities;
 using cine_compra.Server.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Extensions;
-using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
+using System.Text.RegularExpressions;
 
 namespace cine_compra.Server.Controllers
 {
@@ -39,53 +36,70 @@ namespace cine_compra.Server.Controllers
         //    return Ok(user);
         //}
 
-        [HttpPost("register")]
-        public async Task<ActionResult> Register(UserDTO userDTO)
+
+[HttpPost("register")]
+    public async Task<ActionResult> Register(UserDTO userDTO)
+    {
+        var emailRegex = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+        // Validate email
+        if (!emailRegex.IsMatch(userDTO.Email))
         {
-            string passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
-
-            var user = new User
-            {
-
-                UserName = userDTO.UserName,
-                Email = userDTO.Email,
-                Password = passwordHash
-            };
-            _context.Add(user);
-            await _context.SaveChangesAsync();
-
-            var userId = _context.Users.Find(user.Id);
-            var per = new Person
-            {
-                UserId = userId.Id,
-
-            };
-            _context.Add(per);
-            await _context.SaveChangesAsync();
-            return Ok(user);
+            return StatusCode(StatusCodes.Status400BadRequest, new { message = "The email format is invalid." });
         }
 
+        //Search for the user in the db
+        var userFound = _context.Users.FirstOrDefault(x => x.Email == userDTO.Email);
 
-       // [HttpPost("login")]
-        //public async Task<ActionResult> Login(LoginDTO loginDTO)
-        //{
-        //    var usuarioEncontrado = _context.Users.FirstOrDefault(
-        //        u => u.Email == loginDTO.Email);
-        //    //u.Password == loginDTO.Password);
+        if (userFound != null)
+        {
+            return StatusCode(StatusCodes.Status409Conflict, new { message = "A user with that email already exists." });
+        }
 
-        //    if (!BCrypt.Net.BCrypt.Verify(loginDTO.Password, usuarioEncontrado?.Password))
-        //        return BadRequest("Wrong password.");
+        string passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
 
-        //    if (usuarioEncontrado == null)
-        //    {
-        //        return BadRequest("User not found");
-        //    }
-        //    //return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", response = "SuccessLogin" });
+        var user = new User
+        {
+            UserName = userDTO.UserName,
+            Email = userDTO.Email,
+            Password = passwordHash
+        };
+        _context.Add(user);
+        await _context.SaveChangesAsync();
 
-        //    return StatusCode(StatusCodes.Status200OK,await _authorizationServices.ReturnToken(loginDTO));
-        //}
+        var userId = user.Id;
 
-        [HttpPost("login")]
+        var per = new Person
+        {
+            UserId = userId,
+        };
+        _context.Add(per);
+        await _context.SaveChangesAsync();
+
+        return StatusCode(StatusCodes.Status201Created, new { message = "User created successfully" });
+    }
+
+
+
+    // [HttpPost("login")]
+    //public async Task<ActionResult> Login(LoginDTO loginDTO)
+    //{
+    //    var usuarioEncontrado = _context.Users.FirstOrDefault(
+    //        u => u.Email == loginDTO.Email);
+    //    //u.Password == loginDTO.Password);
+
+    //    if (!BCrypt.Net.BCrypt.Verify(loginDTO.Password, usuarioEncontrado?.Password))
+    //        return BadRequest("Wrong password.");
+
+    //    if (usuarioEncontrado == null)
+    //    {
+    //        return BadRequest("User not found");
+    //    }
+    //    //return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", response = "SuccessLogin" });
+
+    //    return StatusCode(StatusCodes.Status200OK,await _authorizationServices.ReturnToken(loginDTO));
+    //}
+
+    [HttpPost("login")]
         public async Task<AuthorizationResponse> LoginV2(LoginDTO loginDTO)
         {
             return await _authorizationServices.ReturnToken(loginDTO);
@@ -117,26 +131,6 @@ namespace cine_compra.Server.Controllers
             else
                 return BadRequest(new AuthorizationResponse { Result = false, Message = "Ha ocurrido un error" });
         }
-
-
-        //[HttpPut("update-data")]
-        //public async Task<ActionResult<List<Person>>> UpdatePerson(PersonDTO updatePersonDTO)
-        //{
-        //    var dbPerson = await _context.Persons.FindAsync(updatePersonDTO.Id);
-
-        //    if (dbPerson is null) return NotFound("Person not found");
-
-        //    dbPerson.FullName = updatePersonDTO.FullName;
-        //    dbPerson.FullSurname = updatePersonDTO.FullSurname;
-        //    dbPerson.NumberPhone = updatePersonDTO.NumberPhone;
-        //    dbPerson.City = updatePersonDTO.City;
-        //    dbPerson.Location = updatePersonDTO.Location;
-
-        //    await _context.SaveChangesAsync();
-
-        //    //return Ok(await _context.Persons.ToListAsync());
-        //    return Ok(await _context.Persons.FindAsync(updatePersonDTO.Id));
-        //}
 
 
         [HttpPut("update")]

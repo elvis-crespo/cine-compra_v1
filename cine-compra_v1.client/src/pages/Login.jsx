@@ -1,5 +1,9 @@
-import { Link } from 'react-router-dom'
+
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
+import { loginUser } from '../redux/userSlice'
 
 const Container = styled.section`
     background: #192a3b;
@@ -13,6 +17,22 @@ const Container = styled.section`
         text-decoration: none;
         color: white;
     }
+    svg{
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 20px;
+        color: #FFF;
+        width: 85px;
+        height: 85px;
+        scale: .8;
+        transition: .3s;
+        opacity: .7;
+        &:hover{
+            scale: 1;
+            opacity: 1;
+        }
+    }
 `
 const Content = styled.div`
     background-image: url('/public/login.png');
@@ -25,7 +45,6 @@ const Content = styled.div`
     `
 const ContentLogin = styled.div`
     min-height: 80vh;
-    /* background: #1D2B3A; */
     margin: 0 0 0 45vw;
     padding: 2rem;
     border-radius:0 12px 12px 0;
@@ -166,24 +185,68 @@ const Option = styled.div`
 `
 
 export const Login = () => {
+
+    // const { auth, setTokens, removeTokens, checkIfAuthenticated } = useAuth();
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    let msj = localStorage.getItem('MessageServer')
+    msj = JSON.parse(msj);
+
+    // const {getMessageServer} = getLocalStore();
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { isLoading, error } = useSelector((state) => state.user);
+    
+    const HandleSubmit = (e) => {
+        e.preventDefault();
+        let userCred = {
+            email, password
+        };
+
+        // localStorage.removeItem('MessageServer')
+
+        dispatch(loginUser(userCred)).then((result) => {
+            if (result.payload.result) {
+                setEmail('');
+                setPassword('');
+                navigate('/home')
+            }
+        })
+    }
+
     return (
         <>
             <Container>
+                <Link to='/'>
+                    <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" strokeMiterlimit="10" strokeWidth="32" d="M256 64C150 64 64 150 64 256s86 192 192 192 192-86 192-192S362 64 256 64z"></path><path fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="32" d="m296 352-96-96 96-96"></path></svg>
+                </Link>
                 <Content>
                     <ContentLogin>
                         <h1>Welcome</h1>
                         <h2>Login</h2>
-                        <form >
-                            <input type='email' placeholder='Email' required='required' />
-                            <input type='password' placeholder='Password' required='required' />
+                        <form onSubmit={HandleSubmit}>
+
+                            <input type='email' placeholder='Email' id='email' required autoComplete="current-email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                            <input type='password' placeholder='Password' id='password' required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
+
                             <Option>
                                 <p><Link to='/sing-up'>Sing up</Link></p>
                                 <p>Forgot your password?</p>
                             </Option>
 
                             <button type='submit'>
-                                <a href="#"><span>Login</span></a>
+                                <a href="#"><span>{isLoading ? 'Loading...' : 'Login'}</span></a>
                             </button>
+
+                           {msj ? <div>{msj}</div> : ''}
+
+                            <div style={{ color: '#FFF' }}>
+                                {error}
+                            </div>
+
+
                         </form>
                     </ContentLogin>
                 </Content>
