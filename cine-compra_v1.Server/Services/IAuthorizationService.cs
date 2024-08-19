@@ -1,13 +1,12 @@
 ﻿using cine_compra.Server.Models.DTOs;
-using cine_compra.Server.Models.Entities;
 using Microsoft.IdentityModel.Tokens;
-using static cine_compra.Server.Models.DTOs.ServiceResponse;
 
 namespace cine_compra.Server.Services
 {
-    public interface IAuthorizationServices
+    public interface IAuthorizationService
     {
         Task<AuthorizationResponse> ReturnToken(LoginDTO authorization);
+        Task<ServiceResponse.RegisterResponse> Register(UserDTO userDTO);
         Task<AuthorizationResponse> ReturnRefreshToken(RefreshTokenRequest refreshTokenRequest, int idUser);
         string GenerateToken(string idUser);
         TokenValidationResult TokenValidation(string token);

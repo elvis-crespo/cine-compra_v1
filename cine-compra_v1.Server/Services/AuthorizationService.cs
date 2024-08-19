@@ -1,59 +1,26 @@
-﻿using Azure.Core;
-using cine_compra.Server.Context;
+﻿using cine_compra.Server.Context;
 using cine_compra.Server.Models.DTOs;
 using cine_compra.Server.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using static cine_compra.Server.Models.DTOs.ServiceResponse;
+using System.Text.RegularExpressions;
 
 namespace cine_compra.Server.Services
 {
-    public class AuthorizationServices : IAuthorizationServices
+    public class AuthorizationService : IAuthorizationService
     {
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
 
-        public AuthorizationServices(ApplicationDbContext context, IConfiguration configuration)
+        public AuthorizationService(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
         }
-
-
-        //if (userDTO is null) return new GeneralResponse(false, "Debe llenar los campos requeridos");
-        //var newUser = new User
-        //{
-        //    UserName = userDTO.UserName,
-        //    Email = userDTO.Email,
-        //    PasswordHash = userDTO.Password,
-        //};
-
-        //var user = await userManager.FindByEmailAsync(newUser.Email);
-        //if (user is not null) return new GeneralResponse(false, "El correo ya es usudo por otro usuario");
-
-        //var createUser = await userManager.CreateAsync(newUser!, userDTO.Password);
-        //if (!createUser.Succeeded) return new GeneralResponse(false, "Ha ocurrido un erros, vuelve a intentar");
-        //return new GeneralResponse(true, "Account Created");
-
-        
-        //    var usuarioEncontrado = _context.Users.FirstOrDefault(
-        //           u => u.Email == loginDTO.Email);
-        //        //u.Password == loginDTO.Password);
-
-        //        if (!BCrypt.Net.BCrypt.Verify(loginDTO.Password, usuarioEncontrado?.Password))
-        //            return BadRequest("Wrong password.");
-
-        //        if (usuarioEncontrado == null)
-        //        {
-        //            return BadRequest("User not found");
-        //}
-        //        //return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", response = "SuccessLogin" });
-
-        //        return StatusCode(StatusCodes.Status200OK, await _authorizationServices.ReturnToken(loginDTO));
-
 
         public async Task<AuthorizationResponse> ReturnToken(LoginDTO loginAuth)
         {
@@ -84,7 +51,108 @@ namespace cine_compra.Server.Services
             return await Save(userFound.Id, tokenCreated, refreshTokenCreated);
         }
 
-        public async Task<AuthorizationResponse> ReturnRefreshToken(RefreshTokenRequest refreshTokenRequest, int idUser)
+        public async Task<ServiceResponse.RegisterResponse> Register(UserDTO userDTO)
+        {
+            var emailRegex = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+
+            // Validate email
+            if (!emailRegex.IsMatch(userDTO.Email))
+            {
+                //De esta manera se instancia un record
+                return new ServiceResponse.RegisterResponse(
+                    IsSuccess: false,
+                    StatusCode:  StatusCodes.Status400BadRequest,
+                    Message: "The email format is invalid."
+                );
+            }
+
+            // Search for the user in the db
+            var userFound = await _context.Users.FirstOrDefaultAsync(x => x.Email == userDTO.Email);
+
+            if (userFound != null)
+            {
+                return new ServiceResponse.RegisterResponse(               
+                    IsSuccess: false,
+                    StatusCode: StatusCodes.Status409Conflict,
+                    Message: "A user with that email already exists."
+                );
+            }
+
+            //encrypt the key with BCrypt
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
+
+
+            //create a user
+            var user = new User
+            {
+                UserName = userDTO.UserName,
+                Email = userDTO.Email,
+                Password = passwordHash
+            };
+            _context.Add(user);
+            await _context.SaveChangesAsync();
+
+            //saves the id of the previously created user
+            var userId = user.Id;
+
+            //creates a record in the person table
+            var person = new Person
+            {
+                UserId = userId
+            };
+            _context.Add(person);
+            await _context.SaveChangesAsync();
+
+            return new ServiceResponse.RegisterResponse(
+                IsSuccess: true,
+                StatusCode: StatusCodes.Status201Created,
+                Message: "User created successfully"
+            );
+        }
+    
+
+    //
+    //public async Task<AuthorizationResponse> Register(UserDTO userDTO)
+    //{
+    //    var emailRegex = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+    //    // Validate email
+    //    if (!emailRegex.IsMatch(userDTO.Email))
+    //    {
+    //        return StatusCode(StatusCodes.Status400BadRequest, new { message = "The email format is invalid." });
+    //    }
+
+    //    //Search for the user in the db
+    //    var userFound = _context.Users.FirstOrDefault(x => x.Email == userDTO.Email);
+
+    //    if (userFound != null)
+    //    {
+    //        return StatusCode(StatusCodes.Status409Conflict, new { message = "A user with that email already exists." });
+    //    }
+
+    //    string passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
+
+    //    var user = new User
+    //    {
+    //        UserName = userDTO.UserName,
+    //        Email = userDTO.Email,
+    //        Password = passwordHash
+    //    };
+    //    _context.Add(user);
+    //    await _context.SaveChangesAsync();
+
+    //    var userId = user.Id;
+
+    //    var per = new Person
+    //    {
+    //        UserId = userId,
+    //    };
+    //    _context.Add(per);
+    //    await _context.SaveChangesAsync();
+
+    //    return StatusCode(StatusCodes.Status201Created, new { message = "User created successfully" });
+    //}
+
+     public async Task<AuthorizationResponse> ReturnRefreshToken(RefreshTokenRequest refreshTokenRequest, int idUser)
         {
             var refreshToken = _context.Tokens.FirstOrDefault(x =>
             x.AccessToken == refreshTokenRequest.ExpirationToken &&

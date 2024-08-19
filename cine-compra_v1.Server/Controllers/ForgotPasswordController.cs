@@ -13,9 +13,9 @@ namespace cine_compra_v1.Server.Controllers
 
         private readonly ApplicationDbContext _context;
         private readonly IEmailService _emailService;
-        private readonly IAuthorizationServices _authorizationServices;
+        private readonly IAuthorizationService _authorizationServices;
 
-        public ForgotPasswordController(IEmailService emailService, ApplicationDbContext context, IAuthorizationServices authorizationServices)
+        public ForgotPasswordController(IEmailService emailService, ApplicationDbContext context, IAuthorizationService authorizationServices)
         {
             _emailService = emailService;
             _context = context;

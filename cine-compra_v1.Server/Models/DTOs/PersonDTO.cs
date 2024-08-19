@@ -4,13 +4,10 @@ namespace cine_compra.Server.Models.DTOs
 {
     public class PersonDTO
     {
-        public int Id { get; set; } 
         public string FullName { get; set; } = string.Empty;
         public string FullSurname { get; set; } = string.Empty;
         public string NumberPhone { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
-        //public int UserId { get; set; }
-
     }
 }
