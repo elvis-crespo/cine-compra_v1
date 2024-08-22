@@ -5,7 +5,7 @@ namespace cine_compra.Server.Services
 {
     public interface IAuthorizationService
     {
-        Task<AuthorizationResponse> ReturnToken(LoginDTO authorization);
+        Task<ServiceResponse.LoginResponse> Login(LoginDTO authorization);
         Task<ServiceResponse.RegisterResponse> Register(UserDTO userDTO);
         Task<AuthorizationResponse> ReturnRefreshToken(RefreshTokenRequest refreshTokenRequest, int idUser);
         string GenerateToken(string idUser);

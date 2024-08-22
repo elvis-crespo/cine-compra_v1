@@ -22,33 +22,43 @@ namespace cine_compra.Server.Services
             _configuration = configuration;
         }
 
-        public async Task<AuthorizationResponse> ReturnToken(LoginDTO loginAuth)
+        public async Task<ServiceResponse.LoginResponse> Login(LoginDTO loginDTO)
         {
-            
-            var userFound = _context.Users.FirstOrDefault(x => x.Email == loginAuth.Email);
+            //Searh the user
+            var userFound = await _context.Users.FirstOrDefaultAsync(x =>
+                x.Email == loginDTO.Email);
+
             if (userFound == null)
             {
-                return new AuthorizationResponse
-                {
-                    Result = false,
-                    Message = "User not found"
-                };
+                return new ServiceResponse.LoginResponse(
+                    IsSuccess: false,
+                    StatusCode: StatusCodes.Status404NotFound,
+                    Message: "User not found."
+                );
             }
+           
 
-            if (!BCrypt.Net.BCrypt.Verify(loginAuth.Password, userFound.Password))
+            //With BCrypt we can compare passwords
+            if (!BCrypt.Net.BCrypt.Verify(loginDTO.Password, userFound.Password))
             {
-                return new AuthorizationResponse
-                {
-                    Result = false,
-                    Message = "Wrong password."
-                };
+                return new ServiceResponse.LoginResponse(
+                   IsSuccess: false,
+                   StatusCode: StatusCodes.Status401Unauthorized,
+                   Message: "Wrong password."
+               );
+
             }
 
-            string tokenCreated =  GenerateToken(userFound.Id.ToString());
-
+            string tokenCreated = GenerateToken(userFound.Id.ToString());
             string refreshTokenCreated = GenerateRefrestToken();
 
-            return await Save(userFound.Id, tokenCreated, refreshTokenCreated);
+            return new ServiceResponse.LoginResponse(
+                IsSuccess: true,
+                StatusCode: StatusCodes.Status200OK,
+                Message: "Login successful.",
+                Token: tokenCreated,
+                RefreshToken: refreshTokenCreated
+            );
         }
 
         public async Task<ServiceResponse.RegisterResponse> Register(UserDTO userDTO)
@@ -109,48 +119,6 @@ namespace cine_compra.Server.Services
                 Message: "User created successfully"
             );
         }
-    
-
-    //
-    //public async Task<AuthorizationResponse> Register(UserDTO userDTO)
-    //{
-    //    var emailRegex = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
-    //    // Validate email
-    //    if (!emailRegex.IsMatch(userDTO.Email))
-    //    {
-    //        return StatusCode(StatusCodes.Status400BadRequest, new { message = "The email format is invalid." });
-    //    }
-
-    //    //Search for the user in the db
-    //    var userFound = _context.Users.FirstOrDefault(x => x.Email == userDTO.Email);
-
-    //    if (userFound != null)
-    //    {
-    //        return StatusCode(StatusCodes.Status409Conflict, new { message = "A user with that email already exists." });
-    //    }
-
-    //    string passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
-
-    //    var user = new User
-    //    {
-    //        UserName = userDTO.UserName,
-    //        Email = userDTO.Email,
-    //        Password = passwordHash
-    //    };
-    //    _context.Add(user);
-    //    await _context.SaveChangesAsync();
-
-    //    var userId = user.Id;
-
-    //    var per = new Person
-    //    {
-    //        UserId = userId,
-    //    };
-    //    _context.Add(per);
-    //    await _context.SaveChangesAsync();
-
-    //    return StatusCode(StatusCodes.Status201Created, new { message = "User created successfully" });
-    //}
 
      public async Task<AuthorizationResponse> ReturnRefreshToken(RefreshTokenRequest refreshTokenRequest, int idUser)
         {

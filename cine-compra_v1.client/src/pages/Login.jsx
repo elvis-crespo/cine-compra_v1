@@ -208,7 +208,7 @@ export const Login = () => {
         // localStorage.removeItem('MessageServer')
 
         dispatch(loginUser(userCred)).then((result) => {
-            if (result.payload.result) {
+            if (result.payload) {
                 setEmail('');
                 setPassword('');
                 navigate('/home')

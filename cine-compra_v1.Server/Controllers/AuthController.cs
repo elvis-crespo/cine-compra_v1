@@ -39,7 +39,7 @@ namespace cine_compra.Server.Controllers
         {
             var response = await _authorizationService.Register(userDTO);
     
-            if (response.IsSuccess)
+            if (!response.IsSuccess)
             {
                 return StatusCode(response.StatusCode, new { message = response.Message});
             }
@@ -49,9 +49,16 @@ namespace cine_compra.Server.Controllers
 
 
         [HttpPost("login")]
-        public async Task<AuthorizationResponse> LoginHandle(LoginDTO loginDTO)
+        public async Task<ActionResult> LoginHandle(LoginDTO loginDTO)
         {
-            return await _authorizationService.ReturnToken(loginDTO);
+            var response = await _authorizationService.Login(loginDTO);
+            if (!response.IsSuccess)
+            {
+                return StatusCode(response.StatusCode, new { message = response.Message });
+            }
+
+            return StatusCode(response.StatusCode, 
+                    new { token = response.Token, refreshToken = response.RefreshToken, message = response.Message });
         }
 
 
