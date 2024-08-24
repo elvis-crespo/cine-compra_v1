@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import styled, { keyframes } from 'styled-components'
 import { useAuth } from '../hooks/useAuth';
+import { useState } from 'react';
 
 const Header = styled.header`
   position: fixed;
@@ -213,24 +214,27 @@ const Footer = styled.footer`
     }
   }
 `
-
+function getFetchData() {
+    let data = localStorage.getItem('fetchData');
+    if (data) {
+        data = JSON.parse(data);
+    } else {
+        data = null;
+    }
+    return data;
+}
 
 export const Home = () => {
-  const {removeTokens, checkIfAuthenticated } = useAuth();
+  const { removeTokens } = useAuth();
   const navigate = useNavigate();
   
   const handleLogout = () => {
     removeTokens();
     navigate('/login');
-  };
+    };
 
-  // setTokens()
-  if (checkIfAuthenticated() === true) {
-    console.log('Congratulations!!')
-  }
-  else {
-    console.log('Logout')
-  }
+   // eslint-disable-next-line no-unused-vars
+   const [data, setData] = useState(getFetchData())
 
   return (
     <>

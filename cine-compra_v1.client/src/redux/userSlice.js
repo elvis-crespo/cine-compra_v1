@@ -1,17 +1,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const URL = "https://localhost:7020/api/v1/auth/";
+const URL = "https://localhost:7020/api/v1/";
+let msj = localStorage.getItem("token");
+msj = JSON.parse(msj);
 
 export const loginUser = createAsyncThunk(
     "user/loginUser",
-    async (userCred) => {
+    async (userCred, { dispatch }) => {
         const request = await axios.post(
-            `${URL}login?Email=${userCred.email}&Password=${userCred.password}`,
+            `${URL}auth/login?Email=${userCred.email}&Password=${userCred.password}`,
             userCred
         );
         const response = request.data;
         localStorage.setItem("user", JSON.stringify(response));
+        dispatch(fetchUserData());
         return response;
     }
 );
@@ -20,11 +23,21 @@ export const registerUser = createAsyncThunk(
     "user/registerUser",
     async (userCred) => {
         const request = await axios.post(
-            `${URL}register?UserName=${userCred.userName}&Email=${userCred.email}&Password=${userCred.password}`,
+            `${URL}auth/register?UserName=${userCred.userName}&Email=${userCred.email}&Password=${userCred.password}`,
             userCred
         );
         const response = request.data;
-        // localStorage.setItem("MessageServer", JSON.stringify(response));
+        localStorage.setItem("MessageServer", JSON.stringify(response));
+        return response;
+    }
+);
+
+export const fetchUserData = createAsyncThunk(
+    "user/fetchUserData",
+    async () => {
+        const request = await axios.get(`${URL}account/data${msj.nameid}`);
+        const response = request.data;
+        localStorage.setItem("fetchData", JSON.stringify(response));
         return response;
     }
 );
@@ -86,6 +99,21 @@ const userSlice = createSlice({
                 } else {
                     state.error = "Unknown error. Please try again later.";
                 }
+            })
+            .addCase(fetchUserData.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(fetchUserData.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.user = action.payload; // Los datos del usuario después de fetch
+                state.error = null;
+            })
+            .addCase(fetchUserData.rejected, (state, action) => {
+                state.isLoading = false;
+                state.user = null;
+                state.error =
+                    action.payload?.message || "Unknown error. Please try again later.";
             });
     },
 });

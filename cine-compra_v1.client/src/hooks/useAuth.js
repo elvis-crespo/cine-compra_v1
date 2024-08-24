@@ -29,7 +29,10 @@ export const useAuth = () => {
     }
 
     const removeTokens = () => {
-        localStorage.removeItem('user')
+        localStorage.removeItem("user")
+        localStorage.removeItem("MessageServer")
+        localStorage.removeItem("token");
+        localStorage.removeItem("fetchData");
         setAuth({
             token: null,
             refreshToken: null,
@@ -43,14 +46,16 @@ export const useAuth = () => {
     const checkIfAuthenticated = () => {
         if (user) {
             const token = user ? user.token : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5IiwibmJmIjoxNzA5NDQwMjExLCJleHAiOjE3MDk0NDAzMzEsImlhdCI6MTcwOTQ0MDIxMX0.JaNr35SseqSRrCmkw3k4nI4mkpq4gKl_BawDzgrrd0g';
-            console.log('token', token)
             if (!token) return false;
 
             const decodedTokens = decodeToken(token);
             if (!decodedTokens) return false
 
+            localStorage.setItem("token", JSON.stringify(decodedTokens));
+
             const currentTime = Math.floor(new Date().getTime() / 1000);
             parseInt(decodedTokens.exp);
+
             console.log('mi token expira en', decodedTokens.exp, 'y son las ', currentTime)
             if (currentTime > decodedTokens.exp) {
                 return false
@@ -62,13 +67,6 @@ export const useAuth = () => {
     };
     
     function decodeToken(str) {
-        // const parts = str.split('.');
-        // const decoded = atob(parts[1]);
-        // const padding = decoded.length % 4;
-        // const paddedDecoded = padding ? decoded + '='.repeat(4 - padding) : decoded;
-        // const base64Decoded = decodeURIComponent(escape(paddedDecoded));
-        // const jsonString = JSON.stringify(base64Decoded);
-        // return JSON.parse(jsonString);
         str = str.split('.')[1];
         str = str.replace('/-/g', '+');
         str = str.replace('/_/g', '/');

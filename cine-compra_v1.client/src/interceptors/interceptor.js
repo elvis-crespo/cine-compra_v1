@@ -17,7 +17,7 @@ const interceptor = () => {
 
     axios.interceptors.request.use((request) => {
         console.log("Starting Request", request);
-        if(request.url?.includes('login') || request.url?.includes('register')) return request
+        if (request.url?.includes('login') || request.url?.includes('register') || request.url?.includes('account')) return request
         return updateHeader(request);
     });
 }

@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using cine_compra.Server.Context;
 using cine_compra.Server.Models.DTOs;
-using cine_compra.Server.Models.Entities;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace cine_compra_v1.Server.Services

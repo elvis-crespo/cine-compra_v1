@@ -22,18 +22,6 @@ namespace cine_compra.Server.Controllers
             _mapper = mapper;
         }
 
-        //[HttpPost("registerc")]
-        //public async Task<ActionResult> Registervq(UserDTO userDTO)
-        //{
-        //    string passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
-        //    var user = _mapper.Map<User>(userDTO);
-
-        //    _context.Add(user);
-        //    await _context.SaveChangesAsync();
-        //    return Ok(user);
-        //}
-
-
         [HttpPost("register")]
         public async Task<ActionResult> RegisterHandle(UserDTO userDTO)
         {

@@ -11,7 +11,6 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 function App() {
 
   const { checkIfAuthenticated } = useAuth();
-  console.log('True o false', checkIfAuthenticated())
 
   return (
     <BrowserRouter>

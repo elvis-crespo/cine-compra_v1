@@ -12,7 +12,7 @@ namespace cine_compra.Server.Utilities
             CreateMap<UserDTO, User>();
             // Map from PersonDTO to Person
             CreateMap<PersonDTO, Person>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore()); // Ignorar si no se debe actualizar el Id
+                .ForMember(dest => dest.Id, opt => opt.Ignore()); 
 
             // Map from Person to PersonDTO
             CreateMap<Person, PersonDTO>();

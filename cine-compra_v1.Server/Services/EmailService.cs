@@ -1,11 +1,9 @@
 ﻿
 using cine_compra_v1.Server.Models.DTOs;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Net.Mail;
-using System.Text;
 
 namespace cine_compra_v1.Server.Services
 {

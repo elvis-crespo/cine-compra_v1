@@ -186,14 +186,11 @@ const Option = styled.div`
 
 export const Login = () => {
 
-    // const { auth, setTokens, removeTokens, checkIfAuthenticated } = useAuth();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
     let msj = localStorage.getItem('MessageServer')
     msj = JSON.parse(msj);
-
-    // const {getMessageServer} = getLocalStore();
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -204,8 +201,6 @@ export const Login = () => {
         let userCred = {
             email, password
         };
-
-        // localStorage.removeItem('MessageServer')
 
         dispatch(loginUser(userCred)).then((result) => {
             if (result.payload) {
