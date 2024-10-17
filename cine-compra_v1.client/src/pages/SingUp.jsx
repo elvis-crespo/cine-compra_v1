@@ -184,7 +184,7 @@ const Option = styled.div`
     }
 `
 
-export const SingUp = () => {
+export default function SingUp() {
 
     const [userName, setUserName] = useState('')
     const [email, setEmail] = useState('')

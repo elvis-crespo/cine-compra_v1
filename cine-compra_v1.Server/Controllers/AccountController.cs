@@ -22,6 +22,12 @@ namespace cine_compra_v1.Server.Controllers
             _userService = userService;
         }
 
+        [HttpGet]
+        public IActionResult Get() 
+        {
+            return Redirect("https://www.youtube.com/");
+        }
+
         [HttpPut("update-data/{id}")]
         public async Task<ActionResult<Person>> UpdateDataHandle(PersonDTO personDTO, int id)
         {

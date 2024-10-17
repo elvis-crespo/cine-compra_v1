@@ -7,7 +7,7 @@ import { useAuth } from '../hooks/useAuth'
 
 interceptor()
 
-export const About = () => {
+export default function About() {
   const { auth, setTokens, removeTokens, checkIfAuthenticated } = useAuth();
   const [dataU, setDataU] = useState('')
   const fetchData = async () => {
