@@ -1,6 +1,16 @@
-*{
-  box-sizing: border-box;
-  padding: 0%;
-  margin: 0%;
-  outline: 0;
+* {
+    box-sizing: border-box;
+    padding: 0%;
+    margin: 0%;
+    outline: 0;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    /* scrollbar-color: #ff7d12 #222222; */
+    scrollbar-color: #edeeef #222222;
+    scrollbar-color: #edeeef #222222;
+    --swiper-theme-color: #edeeef;
+    --swiper-pagination-bullet-inactive-color: #26628a;
+    --swiper-pagination-bullet-inactive-opacity: 0.9;
+    --swiper-pagination-bullet-size: 12px;
+    /* --swiper-navigation-size: 44px; */
 }

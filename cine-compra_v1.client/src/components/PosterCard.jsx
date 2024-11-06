@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
-
+import SwiperCarousel from "./SwiperCarousel";
+ 
 const fadeIn = keyframes`
     0% {
       margin-left: 0%;
@@ -83,94 +84,12 @@ const Section = styled.section`
   }
 `;
 
-const CarruselContainer = styled.div`
-  height: 310px;
-  overflow: hidden;
-  background: #192a3b;
-`;
-
-const ItemCarrusel = styled.div`
-  /* width: 50px; */
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 310px;
-  div:first-child {
-    height: auto;
-    width: 100%;
-    background: transparent;
-    img {
-      width: 100%;
-      height: auto;
-    }
-  }
-  .arrow {
-    position: absolute;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    a {
-      font-size: 25px;
-      text-decoration: none;
-      color: #fff;
-      transform: scale(0.8);
-      transition: 0.3s;
-      &:hover {
-        transform: scale(1.2);
-      }
-      svg {
-      }
-    }
-  }
-`;
-const Puntos = styled.div`
-  padding-top: 10px;
-  padding-bottom: 4rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #192a3b;
-  padding: 20px;
-  a {
-    margin: 0 10px;
-    background: #fff;
-    border-radius: 50%;
-    text-decoration: none;
-    width: 15px;
-    height: 15px;
-    color: black;
-    font-size: 80px;
-    cursor: pointer;
-    list-style-type: none; //ul se elminan los puntos
-  }
-`;
-
 export const PosterCard = () => {
   return (
-    <>
-      <Section>
-        <div>
-          <ul>
-            <li>
-              <img src="/public/lan-beekeeper.jpg" alt="" />
-            </li>
-            <li>
-              <img src="/public/lan-aquaman.png" alt="" />
-            </li>
-            <li>
-              <img src="/public/lan-creed3.png" alt="" />
-            </li>
-            <li>
-              <img src="/public/lan-extraction2.png" alt="" />
-            </li>
-          </ul>
-        </div>
+     <>
+      <SwiperCarousel />
 
+      <Section>
         <h1>Cartelera</h1>
         <div className="contentItem">
           <img
@@ -222,117 +141,24 @@ export const PosterCard = () => {
             alt=""
           />
         </div>
+
+        <div>
+          <ul>
+            <li>
+                <img src="/public/lan-beekeeper.jpg" alt="" />
+            </li>
+            <li>
+                <img src="/public/lan-aquaman.png" alt="" />
+            </li>
+            <li>
+                <img src="/public/lan-creed3.png" alt="" />
+            </li>
+            <li>
+                <img src="/public/lan-extraction2.png" alt="" />
+            </li>
+          </ul>
+        </div>
       </Section>
-
-      <CarruselContainer>
-        <ItemCarrusel id="item-A">
-          <div className="cardImg">
-            <img src="/public/lan-aquaman.png" alt="Aquaman" />
-          </div>
-          <div className="arrow">
-            <a href="#item-C">
-              <svg
-                stroke="currentColor"
-                fill="currentColor"
-                strokeWidth="0"
-                viewBox="0 0 512 512"
-                height="1em"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M217.9 256L345 129c9.4-9.4 9.4-24.6 0-33.9-9.4-9.4-24.6-9.3-34 0L167 239c-9.1 9.1-9.3 23.7-.7 33.1L310.9 417c4.7 4.7 10.9 7 17 7s12.3-2.3 17-7c9.4-9.4 9.4-24.6 0-33.9L217.9 256z"></path>
-              </svg>
-            </a>
-            <a href="#item-B">
-              <svg
-                stroke="currentColor"
-                fill="currentColor"
-                strokeWidth="0"
-                viewBox="0 0 512 512"
-                height="1em"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z"></path>
-              </svg>
-            </a>
-          </div>
-        </ItemCarrusel>
-
-        <ItemCarrusel id="item-B">
-          <div className="cardImg">
-            <img src="/public/lan-beekeeper.jpg" alt="beekeeper" />
-          </div>
-          <div className="arrow">
-            <a href="#item-A">
-              <svg
-                stroke="currentColor"
-                fill="currentColor"
-                strokeWidth="0"
-                viewBox="0 0 512 512"
-                height="1em"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M217.9 256L345 129c9.4-9.4 9.4-24.6 0-33.9-9.4-9.4-24.6-9.3-34 0L167 239c-9.1 9.1-9.3 23.7-.7 33.1L310.9 417c4.7 4.7 10.9 7 17 7s12.3-2.3 17-7c9.4-9.4 9.4-24.6 0-33.9L217.9 256z"></path>
-              </svg>
-            </a>
-            <a href="#item-C">
-              <svg
-                stroke="currentColor"
-                fill="currentColor"
-                strokeWidth="0"
-                viewBox="0 0 512 512"
-                height="1em"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z"></path>
-              </svg>
-            </a>
-          </div>
-        </ItemCarrusel>
-
-        <ItemCarrusel id="item-C">
-          <div className="cardImg">
-            <img src="/public/lan-creed3.png" alt="creed-3" />
-          </div>
-          <div className="arrow">
-            <a href="#item-B">
-              <svg
-                stroke="currentColor"
-                fill="currentColor"
-                strokeWidth="0"
-                viewBox="0 0 512 512"
-                height="1em"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M217.9 256L345 129c9.4-9.4 9.4-24.6 0-33.9-9.4-9.4-24.6-9.3-34 0L167 239c-9.1 9.1-9.3 23.7-.7 33.1L310.9 417c4.7 4.7 10.9 7 17 7s12.3-2.3 17-7c9.4-9.4 9.4-24.6 0-33.9L217.9 256z"></path>
-              </svg>
-            </a>
-            <a href="#item-A">
-              <svg
-                stroke="currentColor"
-                fill="currentColor"
-                strokeWidth="0"
-                viewBox="0 0 512 512"
-                height="1em"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z"></path>
-              </svg>
-            </a>
-          </div>
-        </ItemCarrusel>
-      </CarruselContainer>
-
-      <Puntos>
-        <a href="#item-A"></a>
-        <a href="#item-B"></a>
-        <a href="#item-C"></a>
-      </Puntos>
     </>
   );
 };
