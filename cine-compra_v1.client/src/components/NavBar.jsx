@@ -2,29 +2,49 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Header = styled.header`
-  position: fixed;
-  top: 0;
-  left: 0;
+   position: fixed;
   width: 100%;
-  padding: 1.5rem 9%;
+  height: 75px;
   background: #192a3b;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  padding: 20px;
   z-index: 100;
-  transition: 0.3s;
+  // box-shadow: 0 0 10px #5cfaff, 0 0 20px #5cfaff, 0 0 40px #5cfaff,
+  //   0 0 80px #5cfaff;
   .logo {
-    text-decoration: none;
+    img {
+      width: 140px;
+      border-radius: 5%;
+      border: 2px solid #5cfaff;
+      background: #192a3b;
+    }
   }
-  a {
-    font-size: 1rem;
-    color: #fff;
-    font-weight: 500;
-    margin-left: 3.5rem;
-    transition: 0.2s;
-    font-family: "Poopins", sans-serif;
-    font-weight: bold;
-    text-decoration: none;
+  .links {
+    a {
+      text-decoration: none;
+      font-family: "Poppins", sans-serif;
+      margin: 0 15px;
+      font-size: 14px;
+      color: white;
+      background: #192a3b;
+    }
+    a:hover {
+      border-bottom: 0.5mm solid rgb(100, 100, 100);
+    }
+
+    .primary {
+      background: #fff;
+      color: black;
+      padding: 7px 20px;
+      border-radius: 5mm;
+    }
+    .primary:hover {
+      background: rgb(100, 100, 100);
+      color: white;
+      border: none;
+    }
   }
 `;
 
@@ -32,14 +52,18 @@ export const NavBar = () => {
   return (
     <>
       <Header id="#">
-        <Link className="logo" to="/">
-          Logo
-        </Link>
-        <nav>
+        <div className="logo">
+          <Link to={"/"}>
+            <img src="/public/1.jpg" alt="" />
+          </Link>
+        </div>
+        <div className="links">
           <Link to="/login">Login</Link>
-          <Link to="/sing-up">Sing Up</Link>
-        </nav>
-      </Header>
+          <Link to="/sing-up" className="primary">
+            Sing Up
+          </Link>
+        </div>
+          </Header>
     </>
   );
 }

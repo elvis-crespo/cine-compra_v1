@@ -63,9 +63,14 @@ const Section = styled.section`
   .contentItem {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 3fr));
-    max-width: 800px;
-    margin: 0 auto 25px auto;
-    gap: 32px 16px;
+    //max-width: 900px;
+    //margin: 0 auto 25px auto;
+    //gap: 32px 16px;
+    width: 80%;
+    margin: 0 auto;
+    gap: 16px;
+    align-items: center;
+    justify-items: center;
     img {
       border-radius: 8px;
       width: 90%;
@@ -139,6 +144,54 @@ export const PosterCard = () => {
           <img
             src="https://image.tmdb.org/t/p/original/A5TK9Q63r2h4cx1q2Isl3bTaVlY.jpg"
             alt=""
+          />
+          <img
+              src="https://th.bing.com/th/id/OIP.Qm-Fvt-16YA82zr6sHA_uwHaLH?rs=1&pid=ImgDetMain"
+              alt=""
+          />
+          <img
+              src="https://c8.alamy.com/comp/2NBNY3H/creed-iii-2023-directed-by-michael-b-jordan-credit-metro-goldwyn-mayer-mgm-album-2NBNY3H.jpg"
+              alt=""
+          />
+          <img
+              src="https://image.tmdb.org/t/p/w500/dPAdQdRjW2TUJwl2wsgwYigPM4B.jpg"
+              alt=""
+          />
+          <img
+              src="https://image.tmdb.org/t/p/original/A5TK9Q63r2h4cx1q2Isl3bTaVlY.jpg"
+              alt=""
+          />
+          <img
+              src="https://th.bing.com/th/id/OIP.Qm-Fvt-16YA82zr6sHA_uwHaLH?rs=1&pid=ImgDetMain"
+              alt=""
+          />
+          <img
+              src="https://c8.alamy.com/comp/2NBNY3H/creed-iii-2023-directed-by-michael-b-jordan-credit-metro-goldwyn-mayer-mgm-album-2NBNY3H.jpg"
+              alt=""
+          />
+          <img
+              src="https://image.tmdb.org/t/p/w500/dPAdQdRjW2TUJwl2wsgwYigPM4B.jpg"
+              alt=""
+          />
+          <img
+              src="https://image.tmdb.org/t/p/original/A5TK9Q63r2h4cx1q2Isl3bTaVlY.jpg"
+              alt=""
+          />
+          <img
+              src="https://th.bing.com/th/id/OIP.Qm-Fvt-16YA82zr6sHA_uwHaLH?rs=1&pid=ImgDetMain"
+              alt=""
+          />
+          <img
+              src="https://c8.alamy.com/comp/2NBNY3H/creed-iii-2023-directed-by-michael-b-jordan-credit-metro-goldwyn-mayer-mgm-album-2NBNY3H.jpg"
+              alt=""
+          />
+          <img
+             src="https://image.tmdb.org/t/p/w500/dPAdQdRjW2TUJwl2wsgwYigPM4B.jpg"
+             alt=""
+          />
+          <img
+             src="https://image.tmdb.org/t/p/original/A5TK9Q63r2h4cx1q2Isl3bTaVlY.jpg"
+             alt=""
           />
         </div>
 
