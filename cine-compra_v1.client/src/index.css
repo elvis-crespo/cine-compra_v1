@@ -14,3 +14,45 @@
     --swiper-pagination-bullet-size: 12px;
     /* --swiper-navigation-size: 44px; */
 }
+
+.btn-primary {
+    display: inline-block;
+    outline: none;
+    cursor: pointer;
+    font-weight: 500;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    height: 36px;
+    line-height: 34px;
+    font-size: 14px;
+    color: #ffffff;
+    background-color: #26628a;
+    transition: background-color 0.2s ease-in-out 0s, opacity 0.2s ease-in-out 0s;
+    padding: 0 18px;
+}
+
+.btn-primary:hover {
+    color: #ffffff;
+    background-color: #3b6988;
+}
+
+.btn-secondary {
+    display: inline-block;
+    outline: none;
+    cursor: pointer;
+    font-weight: 500;
+    border: 1px solid #26628a;
+    border-radius: 2px;
+    height: 36px;
+    line-height: 34px;
+    font-size: 14px;
+    color: #3b6988;
+    background-color: transparent;
+    transition: background-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    padding: 0 18px;
+}
+
+.btn-secondary:hover {
+    color: #ffffff;
+    background-color: #3b6988;
+}
