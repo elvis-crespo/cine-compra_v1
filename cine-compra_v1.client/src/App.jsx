@@ -9,6 +9,7 @@ const Home = React.lazy(() => import('./pages/Home'))
 const About = React.lazy(() => import('./pages/About'))
 const Card = React.lazy(() => import('./components/Card'))
 const SingUp = React.lazy(() => import('./pages/SingUp'))
+const FilmDetails = React.lazy(() => import("./pages/FilmDetails"));
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
                     <Route path="/" element={<Landing />}></Route>
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/sing-up" element={<SingUp />}></Route>
+                    <Route path="/sinopsis" element={<FilmDetails />}></Route>
 
                     <Route element={<ProtectedRoute isAllowed={checkIfAuthenticated} />}>
                         <Route path="/home" element={<Home />}></Route>
