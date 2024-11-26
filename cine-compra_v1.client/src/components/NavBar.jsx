@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Header = styled.header`
-   position: fixed;
+  position: fixed;
   width: 100%;
   height: 75px;
   background: #192a3b;
@@ -48,22 +49,34 @@ const Header = styled.header`
   }
 `;
 
-export const NavBar = () => {
-  return (
-    <>
-      <Header id="#">
-        <div className="logo">
-          <Link to={"/"}>
-            <img src="/public/1.jpg" alt="" />
-          </Link>
-        </div>
-        <div className="links">
-          <Link to="/login">Login</Link>
-          <Link to="/sing-up" className="primary">
-            Sing Up
-          </Link>
-        </div>
-          </Header>
-    </>
-  );
-}
+// eslint-disable-next-line react/prop-types
+export const NavBar = ({ user }) => {
+    return (
+        <>
+            <Header id="#">
+                <div className="logo">
+                    <Link to={"/"}>
+                        <img src="/public/1.jpg" alt="" />
+                    </Link>
+                </div>
+
+                <div className="links">
+                    {user ? (
+                        <>
+                            <span>{user.name}</span>
+                            <Link to="/home">Home</Link>
+                            <Link to="/profile">Profile</Link>
+                        </>
+                    ) : (
+                        <>
+                            <Link to="/login">Login</Link>
+                            <Link to="/sing-up" className="primary">
+                                Sing Up
+                            </Link>
+                        </>
+                    )}
+                </div>
+            </Header>
+        </>
+    );
+};

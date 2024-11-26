@@ -12,7 +12,8 @@ const FooterContainer = styled.footer`
     position: relative;
     p {
       color: #fff;
-      font-size: 1.6rem;
+      font-size: 14px;
+      font-family: "Poppins", sans-serif;
     }
   }
   .footer-iconTop {
