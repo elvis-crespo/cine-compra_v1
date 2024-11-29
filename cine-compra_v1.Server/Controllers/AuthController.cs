@@ -49,6 +49,13 @@ namespace cine_compra.Server.Controllers
                     new { token = response.Token, refreshToken = response.RefreshToken, message = response.Message });
         }
 
+        //[HttpPost("logingoogle")]
+        //public async Task<ActionResult> LoginGoogleHandle()
+        //{
+        //    var response = _authorizationService.LoginGoogle;
+        //    return Ok(response);
+        //}
+
 
         [HttpPost]
         [Route("GetRefreshToken")]

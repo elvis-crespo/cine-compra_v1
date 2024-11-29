@@ -61,6 +61,23 @@ namespace cine_compra.Server.Services
             );
         }
 
+        private readonly string clientId = "YOUR CLIENT ID";
+        private readonly string clientSecret = "YOUR CLIENT SECRET";
+        private readonly string redirectUri = "REDIRECT";
+
+        public async Task<ServiceResponse.GeneralResponse> LoginGoogle()
+        {
+            var authorizationUrl =
+                $"https://accounts.google.com/o/oauth2/v2/auth" +
+                $"?response_type=code&client_id={clientId}" +
+                $"&redirect_uri={redirectUri}&scope=openid%20email%20profile";
+
+            return new ServiceResponse.GeneralResponse(
+                Flag: true,
+                Message: $"Login Google: {authorizationUrl}"
+             );
+        }
+
         public async Task<ServiceResponse.RegisterResponse> Register(UserDTO userDTO)
         {
             var emailRegex = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
@@ -247,6 +264,11 @@ namespace cine_compra.Server.Services
                 refreshToken = Convert.ToBase64String(byteData);
             }
             return refreshToken;
+        }
+
+        Task<ServiceResponse.LoginGoogle> IAuthorizationService.LoginGoogle()
+        {
+            throw new NotImplementedException();
         }
     }
 }
